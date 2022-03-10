@@ -2,10 +2,10 @@ require 'json'
 
 # MARCH TEAM SPACE
 ## DO NOT REMOVE THESE LINES
-libraryVersion = "1.1.4"
-libraryName = "LibraryTemplate"
-gitHomepage = "https://github.com/santander-group-spain/march-mobile-ios_library_template"
-gitRemote = "git@github.com:santander-group-spain/march-mobile-ios_library_template.git"
+libraryVersion = "1.0.1"
+libraryName = "ExampleLibraryTemplate"
+gitHomepage = "https://github.com/ca-aguilar/ExampleLibraryTemplate"
+gitRemote = "git@github.com:ca-aguilar/ExampleLibraryTemplate.git"
 ## END DO NOT REMOVE THESE LINES
 # END MARCH TEAM SPACE
 

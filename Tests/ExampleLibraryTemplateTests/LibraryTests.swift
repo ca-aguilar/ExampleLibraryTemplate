@@ -1,5 +1,5 @@
 import XCTest
-@testable import LibraryTemplate
+@testable import ExampleLibraryTemplate
 
 final class LibraryTests: XCTestCase {
 

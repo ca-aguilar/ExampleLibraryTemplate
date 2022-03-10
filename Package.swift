@@ -6,8 +6,8 @@ import Foundation
 
 // MARCH TEAM SPACE
 /// DO NOT REMOVE THESE LINES
-let libraryVersion = "1.1.4"
-let libraryName = "LibraryTemplate"
+let libraryVersion = "1.0.1"
+let libraryName = "ExampleLibraryTemplate"
 /// END DO NOT REMOVE THESE LINES
 // END MARCH TEAM SPACE
 

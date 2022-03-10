@@ -18,7 +18,7 @@ public class ResourceHelper {
     private init() {}
 
     // Format is <library name>_<target name> where <library name> and <target name> should be equal
-    private static let bundleName = "LibraryTemplate_LibraryTemplate"
+    private static let bundleName = "ExampleLibraryTemplate_ExampleLibraryTemplate"
 
     /**
     Gives access to library's resource bundle.

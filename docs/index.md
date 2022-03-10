@@ -1,4 +1,4 @@
-# LibraryTemplate
+# ExampleLibraryTemplate
 
 ## Important
 This is the documentation of your project. Feel free to modify this file and add anything that you consider relevant. But be careful applying changes to **docs/**, this directory is modifying during CI by several tasks that autogenerate documentation for code, coverage and linter.
