@@ -1,0 +1,6 @@
+{
+  "technology": "iOS-LIBRARY",
+  "ios": {
+    "libraryName": "LibraryTemplate"
+  }  
+}

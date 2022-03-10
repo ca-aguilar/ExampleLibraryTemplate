@@ -1,0 +1,28 @@
+name: Build & test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: macos-latest
+    steps:
+      - name: Running on branch
+        run: |
+          echo "Building and testing library on: ${{ github.head_ref }}"
+          echo "Destination branch: ${{ github.base_ref }}"
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}        
+      - name: Build library using SPM
+        run: |
+          swift build --verbose
+      - name: Run library tests using SPM
+        run: |
+          swift test --verbose

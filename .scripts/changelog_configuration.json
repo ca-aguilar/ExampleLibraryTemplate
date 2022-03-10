@@ -1,0 +1,64 @@
+{
+    "categories": [
+      {
+        "title": "## 🚀 Features",
+        "labels": ["feature", "Enhancement"]
+      },
+      {
+        "title": "## 🐛 Fixes",
+        "labels": ["fix", "bug"]
+      },
+      {
+        "title": "## 🧪 Tests",
+        "labels": ["test"]
+      },
+      {
+        "title": "## 💬 Other",
+        "labels": ["other"]
+      },
+      {
+          "title": "## 📦 Dependencies",
+          "labels": ["dependencies"]
+      },
+      {
+        "title": "## ? Uncategorized",
+        "labels": []
+    }
+    ],
+    "ignore_labels": [
+      "ignore"
+    ],
+    "sort": "ASC",
+    "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>",
+    "pr_template": "PR: #${{NUMBER}} - ${{TITLE}} \n\n${{URL}} \n\nAuthors: https://github.com/${{AUTHOR}} \n\n${{BODY}}\n",
+    "empty_template": "${{OWNER}} \n ${{REPO}} \n ${{FROM_TAG}} -> ${{TO_TAG}}",
+    "label_extractor": [
+      {
+        "pattern": "(.) (.+)",
+        "target": "$1",
+        "flags": "gu"
+      },
+      {
+        "pattern": "\\[Issue\\]",
+        "on_property": "title",
+        "method": "match"
+      }
+    ],
+    "duplicate_filter": {
+      "pattern": "\\[ABC-....\\]",
+      "on_property": "title",
+      "method": "match"
+    },
+    "max_tags_to_fetch": 200,
+    "max_pull_requests": 500,
+    "max_back_track_time_days": 365,
+    "exclude_merge_branches": [
+    ],
+    "tag_resolver": {
+      "method": "semver"
+    },
+    "base_branches": [
+      "main",
+      "develop"
+    ]
+}

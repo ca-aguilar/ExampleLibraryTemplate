@@ -1,0 +1,151 @@
+name: Create a release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  code-docs:
+    runs-on: macos-latest
+    steps:
+      - name: Running on branch
+        run: |
+          echo "Running code's docs auto-gen on: ${{ github.ref }}"
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove source code documentation
+        run: |
+          rm -rf docs/code
+      - name: Generate source code documentation
+        uses: sersoft-gmbh/swifty-docs-action@v1.2.1
+        with:
+          source: ${{ github.workspace }}
+          output: docs/code
+          clean: true
+      - name: Publish changes in documentation
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with: 
+          commit_message: Updated automated source code documentation
+  lint-docs:
+    needs: code-docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove swiftlint documentation
+        run: |
+          rm -rf docs/swiftlint       
+      - name: Generate Swiftlint documentation
+        uses: norio-nomura/action-swiftlint@3.2.1
+        with:
+          args: generate-docs --path docs/swiftlint
+      - name: Publish changes in documentation
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with: 
+          commit_message: Updated SwiftLint documentation
+  code-reports:
+    needs: lint-docs
+    runs-on: macos-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove swiftlint documentation
+        run: |
+          rm -rf docs/coverage docs/lint
+      - name: Install dependencies
+        run: |
+          brew install lcov
+      - name: Build library with coverage configuration
+        run: |
+          ./.scripts/01.build-and-test.sh
+      - name: Generate Code Coverage report
+        run: |
+          ./.scripts/02.report-code-coverage.sh
+      - name: Generate Code Lint Report
+        run: |
+          ./.scripts/03.report-swift-lint.sh
+      - name: Publish changes in documentation
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with: 
+          commit_message: Updated source code reports (by Workflow)
+  release:
+    needs: code-reports 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get current date
+        id: get_date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Read version from SPM and Podspec
+        id: get_version
+        run: |
+          VERSION_SPM=$(grep "^let libraryVersion" Package.swift | sed -E "s/let libraryVersion.*\"(.*)\"/\1/g")
+          VERSION_POD=$(grep "^libraryVersion" *.podspec | sed -E "s/libraryVersion.*\"(.*)\"/\1/g")
+          echo "Library version (SPM) $VERSION_SPM"
+          echo "Library version (Cocoapods) $VERSION_POD"
+          if [ "$VERSION_SPM" != "$VERSION_POD" ]; then
+              echo "Version in Podspec is not the same as in Package.swift. This is an error! Aborting release."
+              exit 1
+          fi
+          echo "::set-output name=version::$(echo $VERSION_SPM)"
+      - name: Build CHANGELOG
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v2.9.0
+        with:
+          configuration: ".scripts/changelog_configuration.json"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update CHANGELOG.md
+        run: |
+          echo -e "\n$(cat CHANGELOG.md)" > CHANGELOG.md
+          echo -e "$RELEASE_CHANGELOG\n$(cat CHANGELOG.md)" > CHANGELOG.md
+          echo -e "PRs in release: $RELEASE_PRS\n$(cat CHANGELOG.md)" > CHANGELOG.md
+          echo -e "Date: $DATE\n$(cat CHANGELOG.md)" > CHANGELOG.md
+          echo -e "# Version: $VERSION\n$(cat CHANGELOG.md)" > CHANGELOG.md
+          cp CHANGELOG.md docs/CHANGELOG.md
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
+          DATE: ${{ steps.get_date.outputs.date }}
+          RELEASE_CHANGELOG: ${{ steps.build_changelog.outputs.changelog }}
+          RELEASE_PRS: ${{ steps.build_changelog.outputs.pull_requests }}
+      - name: Update README.md
+        run: |
+          sed -E "s/(.*\/releases\/tag)\/(.*)\)/\1\/$VERSION)/g;t" < README.md > README.draft
+          sed -E "s/(.*\/Latests%20release)-(.*)-(blue.*)/\1-$VERSION-\3/g;t" < README.draft > README.md
+          rm -rf README.draft
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}          
+      - name: Publish changes in CHANGELOG.md and README.md
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with: 
+          commit_message: Updated CHANGELOG.md and README.md
+      - name: Create a release/tag from this version
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Version ${{ steps.get_version.outputs.version }}
+          body: "PRs in release: ${{ steps.build_changelog.outputs.pull_requests }}\n${{ steps.build_changelog.outputs.changelog }}"
+          draft: false
+          prerelease: false

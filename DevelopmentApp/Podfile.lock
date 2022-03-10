@@ -1,0 +1,16 @@
+PODS:
+  - LibraryTemplate (1.0.0)
+
+DEPENDENCIES:
+  - LibraryTemplate (from `../`)
+
+EXTERNAL SOURCES:
+  LibraryTemplate:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  LibraryTemplate: 380ab9b87db3844885309b1e10e2796946d600b0
+
+PODFILE CHECKSUM: 1b6809c6f085a5c92143982ff3ad93f0945007f4
+
+COCOAPODS: 1.11.2

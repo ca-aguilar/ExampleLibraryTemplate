@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ResourceHelper Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/ResourceHelper" class="dashAnchor"></a>
+    <a title="ResourceHelper Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">LibraryTemplate 1.1.4 Docs</a> (100% documented)</p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">LibraryTemplate Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        ResourceHelper Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ResourceHelper.html">ResourceHelper</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ResourceHelper</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ResourceHelper</span></code></pre>
+
+                </div>
+              </div>
+            <p><strong>ResourceHelper</strong> provides access to bundled resources no matter if the library
+was included in a project using SPM or Cocoapods.</p>
+
+<p>Put library resources inside <strong>Sources/&lt;Library Name&gt;/Resources</strong>. Remember that that directory structure is
+flattened when the bundle is generated. So filenames should be unique eventhought they are in different directories.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:15LibraryTemplate14ResourceHelperC6moduleSo8NSBundleCvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/module" class="dashAnchor"></a>
+                    <a class="token" href="#/s:15LibraryTemplate14ResourceHelperC6moduleSo8NSBundleCvpZ">module</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gives access to library&rsquo;s resource bundle.</p>
+
+<p>As SPM generates a Bundle.module attr, which is not available using Cocoapods,
+this approach should be taken in order to make sure that the Bundle and
+its content can be accessed no matter how a developer integrates this library.</p>
+
+<p>Usage:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">url</span> <span class="o">=</span> <span class="kt">ResourceHelper</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="nf">url</span><span class="p">(</span><span class="nv">forResource</span><span class="p">:</span> <span class="s">"filename"</span><span class="p">,</span> <span class="nv">withExtension</span><span class="p">:</span> <span class="s">"ext"</span><span class="p">)</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If SPM is used from CLI, ResourceHelper.module returns (SPM&rsquo;s) Bundle.module
+
+</div><div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Access to <strong>module</strong> throws a fatal error if the bundle does not exist. This error happens if there is a error building the library&rsquo;s bundle.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">module</span><span class="p">:</span> <span class="kt">Bundle</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2022 <a class="link" href="https://github.com/santander-group-spain/march-mobile-ios_library_template" target="_blank" rel="external noopener">Ezequiel (Kimi) Aceto and Ivan (NSCabezon) Cabezón Orjales</a>. All rights reserved. (Last updated: 2022-03-10)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>
